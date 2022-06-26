@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Component;
 
 import com.algaworks.glauber.algafood.domain.model.State;
@@ -36,8 +37,13 @@ public class StateRepositoryImpl implements StateRepository {
 
 	@Transactional
 	@Override
-	public void remover(State state) {
-		state = buscar(state.getId());
+	public void remover(Long stateId) {
+		State state = buscar(stateId);
+		
+		if (state == null) {
+			throw new EmptyResultDataAccessException(1);
+		}
+		
 		entityManager.remove(state);
 	}
 
