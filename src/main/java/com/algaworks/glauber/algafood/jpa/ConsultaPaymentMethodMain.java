@@ -19,7 +19,7 @@ public class ConsultaPaymentMethodMain {
 		
 		PaymentMethodRepository paymentMethodRepository = applicationContext.getBean(PaymentMethodRepository.class);
 		
-		List<PaymentMethod> payments = paymentMethodRepository.listar();
+		List<PaymentMethod> payments = paymentMethodRepository.findAll();
 		
 		payments.stream().forEach(payment -> System.out.printf("%d - %s\n", payment.getId(), payment.getDescription()));
 	}

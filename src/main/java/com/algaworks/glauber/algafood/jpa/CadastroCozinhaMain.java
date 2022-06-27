@@ -20,7 +20,7 @@ public class CadastroCozinhaMain {
 		Cuisine cozinha = new Cuisine();
 		cozinha.setName("Brasileira");
 		
-		Cuisine cozinhaSalva = cuisineRepository.salvar(cozinha);
+		Cuisine cozinhaSalva = cuisineRepository.save(cozinha);
 		System.out.printf("%d - %s\n", cozinhaSalva.getId(), cozinhaSalva.getName());
 	}
 }

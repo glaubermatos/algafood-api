@@ -1,13 +1,11 @@
 package com.algaworks.glauber.algafood.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.glauber.algafood.domain.model.PaymentMethod;
 
-public interface PaymentMethodRepository {
+@Repository
+public interface PaymentMethodRepository extends JpaRepository<PaymentMethod, Long>{
 
-	List<PaymentMethod> listar();
-	PaymentMethod buscar(Long id);
-	PaymentMethod salvar(PaymentMethod paymentMethod);
-	void remover(PaymentMethod paymentMethod);
 }

@@ -1,6 +1,7 @@
 package com.algaworks.glauber.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,18 +34,18 @@ public class CityController {
 
 	@GetMapping
 	public List<City> listar() {
-		return cityRepository.listar();
+		return cityRepository.findAll();
 	}
 	
 	@GetMapping("/{cityId}")
 	public ResponseEntity<City> buscar(@PathVariable Long cityId) {
-		City city = cityRepository.buscar(cityId);
+		Optional<City> cityOptional = cityRepository.findById(cityId);
 		
-		if (city == null) {
+		if (cityOptional.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok(city);
+		return ResponseEntity.ok(cityOptional.get());
 	}
 	
 	@PostMapping
@@ -60,17 +61,17 @@ public class CityController {
 	
 	@PutMapping("/{cityId}")
 	public ResponseEntity<?> atualizar(@PathVariable Long cityId, @RequestBody City city) {
-		City currentCity = cityRepository.buscar(cityId);
+		Optional<City> currentCityOptional = cityRepository.findById(cityId);
 		
-		if (currentCity == null) {
+		if (currentCityOptional.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		BeanUtils.copyProperties(city, currentCity, "id");
+		BeanUtils.copyProperties(city, currentCityOptional.get(), "id");
 		
 		try {
-			currentCity = cityRegistrationService.salvar(currentCity);
-			return ResponseEntity.ok(currentCity);
+			city = cityRegistrationService.salvar(currentCityOptional.get());
+			return ResponseEntity.ok(city);
 			
 		} catch (EntityNotFoundException e) {
 			return ResponseEntity.badRequest().body(e.getMessage());

@@ -21,14 +21,11 @@ public class RestaurantRegistrationService {
 	public Restaurant salvar(Restaurant restaurant) {
 		Long cuisineId = restaurant.getCuisine().getId();
 		
-		Cuisine cuisine = cuisineRepository.buscar(cuisineId);
-		
-		if (cuisine == null) {
-			throw new EntityNotFoundException(String.format("A cozinha de código %d não existe", cuisineId));
-		}
+		Cuisine cuisine = cuisineRepository.findById(cuisineId)
+				.orElseThrow(() -> new EntityNotFoundException(String.format("A cozinha de código %d não existe", cuisineId)));
 		
 		restaurant.setCuisine(cuisine);
 		
-		return restaurantRepository.salvar(restaurant);
+		return restaurantRepository.save(restaurant);
 	}
 }

@@ -1,6 +1,7 @@
 package com.algaworks.glauber.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,18 +35,18 @@ public class StateController {
 	
 	@GetMapping
 	public List<State> listar() {
-		return stateRepository.listar();
+		return stateRepository.findAll();
 	}
 	
 	@GetMapping("/{stateId}")
 	public ResponseEntity<State> buscar(@PathVariable Long stateId) {
-		State state = stateRepository.buscar(stateId);
+		Optional<State> stateOptional = stateRepository.findById(stateId);
 		
-		if (state == null) {
+		if (stateOptional.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		return ResponseEntity.ok(state);
+		return ResponseEntity.ok(stateOptional.get());
 	}
 	
 	@PostMapping
@@ -56,16 +57,16 @@ public class StateController {
 	
 	@PutMapping("/{stateId}")
 	public ResponseEntity<State> atualizar(@PathVariable Long stateId, @RequestBody State state) {
-		State currentState = stateRepository.buscar(stateId);
+		Optional<State> currentStateOptional = stateRepository.findById(stateId);
 		
-		if (currentState == null) {
+		if (currentStateOptional.isEmpty()) {
 			return ResponseEntity.notFound().build();
 		}
 		
-		BeanUtils.copyProperties(state, currentState, "id");
+		BeanUtils.copyProperties(state, currentStateOptional.get(), "id");
 		
-		currentState = stateRegistrationService.salvar(currentState);
-		return ResponseEntity.ok(currentState);
+		state = stateRegistrationService.salvar(currentStateOptional.get());
+		return ResponseEntity.ok(state);
 	}
 	
 	@DeleteMapping("/{stateId}")

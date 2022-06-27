@@ -7,7 +7,6 @@ import org.springframework.context.ApplicationContext;
 import com.algaworks.glauber.algafood.AlgafoodApiApplication;
 import com.algaworks.glauber.algafood.domain.model.Cuisine;
 import com.algaworks.glauber.algafood.domain.repository.CuisineRepository;
-import com.algaworks.glauber.algafood.infrastructure.repository.CuisineRepositoryImpl;
 
 public class ExclusaoCozinhaMain {
 
@@ -16,11 +15,11 @@ public class ExclusaoCozinhaMain {
 					.web(WebApplicationType.NONE)
 					.run(args);
 		
-		CuisineRepository cuisineRepository = applicationContext.getBean(CuisineRepositoryImpl.class);
+		CuisineRepository cuisineRepository = applicationContext.getBean(CuisineRepository.class);
 		Cuisine cozinha = new Cuisine();
 		cozinha.setId(1L);
 		
-		cuisineRepository.remover(cozinha.getId());
+		cuisineRepository.deleteById(cozinha.getId());
 		
 	}
 }

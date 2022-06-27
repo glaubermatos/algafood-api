@@ -19,7 +19,7 @@ public class ConsultaCityMain {
 		
 		CityRepository cityRepository = applicationContext.getBean(CityRepository.class);
 		
-		List<City> cities = cityRepository.listar();
+		List<City> cities = cityRepository.findAll();
 		
 		cities.stream().forEach(city -> System.out.printf("%d - %s - %s\n", city.getId(), city.getName(), city.getState().getName()));
 	}

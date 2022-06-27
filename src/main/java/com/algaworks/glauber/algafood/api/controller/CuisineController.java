@@ -1,6 +1,7 @@
 package com.algaworks.glauber.algafood.api.controller;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +35,18 @@ public class CuisineController {
 
 	@GetMapping
 	public List<Cuisine> listar() {
-		return cuisineRepository.listar();
+		return cuisineRepository.findAll();
 	}
 	
 	@GetMapping("/{cuisineId}")
 	public ResponseEntity<Cuisine> buscar(@PathVariable Long cuisineId) {
-		Cuisine cozinha = cuisineRepository.buscar(cuisineId);
+		Optional<Cuisine> cozinhaOptional = cuisineRepository.findById(cuisineId);
 		
-		if (cozinha == null) {
+		if (cozinhaOptional.isEmpty()) {
 			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
 		}
-		return ResponseEntity.status(HttpStatus.OK).body(cozinha);	
+		
+		return ResponseEntity.status(HttpStatus.OK).body(cozinhaOptional.get());	
 	}
 	
 	@PostMapping
@@ -56,14 +58,14 @@ public class CuisineController {
 	
 	@PutMapping("/{cuizineId}")
 	public ResponseEntity<Cuisine> atualizar(@PathVariable Long cuizineId, @RequestBody Cuisine cozinha) {
-		Cuisine currentCuisine = cuisineRepository.buscar(cuizineId);
+		Optional<Cuisine> currentCuisineOptional = cuisineRepository.findById(cuizineId);
 		
-		if (currentCuisine != null) {
-			BeanUtils.copyProperties(cozinha, currentCuisine, "id");
+		if (currentCuisineOptional.isPresent()) {
+			BeanUtils.copyProperties(cozinha, currentCuisineOptional.get(), "id");
 			
-			currentCuisine = cuisineRegistrationService.salvar(currentCuisine);
+			Cuisine cuisine = cuisineRegistrationService.salvar(currentCuisineOptional.get());
 			
-			return ResponseEntity.ok(currentCuisine);
+			return ResponseEntity.ok(cuisine);
 		}
 		
 		return ResponseEntity.notFound().build();

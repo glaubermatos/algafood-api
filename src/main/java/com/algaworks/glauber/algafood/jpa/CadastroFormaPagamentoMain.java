@@ -20,7 +20,7 @@ public class CadastroFormaPagamentoMain {
 		PaymentMethod payment = new PaymentMethod();
 		payment.setDescription("Cartão de Crédito");
 		
-		payment = paymentMethodRepository.salvar(payment);
+		payment = paymentMethodRepository.save(payment);
 		System.out.printf("%d - %s\n", payment.getId(), payment.getDescription());
 	}
 }

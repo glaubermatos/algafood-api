@@ -1,14 +1,16 @@
 package com.algaworks.glauber.algafood.domain.repository;
 
 import java.util.List;
+import java.util.Optional;
+
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.glauber.algafood.domain.model.Cuisine;
 
-public interface CuisineRepository {
+@Repository
+public interface CuisineRepository extends CustomJpaRepository<Cuisine, Long> {
 	
-	List<Cuisine> listar();
-	Cuisine buscar(Long id);
-	Cuisine salvar(Cuisine cuisine);
-	void remover(Long id);
-	
+	List<Cuisine> findByNameContaining(String name);
+	Optional<Cuisine> findByName(String name);
+	boolean existsByName(String name);
 }

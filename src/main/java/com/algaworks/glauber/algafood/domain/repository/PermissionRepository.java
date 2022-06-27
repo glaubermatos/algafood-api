@@ -1,13 +1,11 @@
 package com.algaworks.glauber.algafood.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.glauber.algafood.domain.model.Permission;
 
-public interface PermissionRepository {
+@Repository
+public interface PermissionRepository extends JpaRepository<Permission, Long>{
 
-	List<Permission> listar();
-	Permission buscar(Long id);
-	Permission salvar(Permission permission);
-	void remover(Permission permission);
 }

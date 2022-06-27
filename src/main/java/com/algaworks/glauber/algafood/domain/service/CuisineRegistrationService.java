@@ -17,12 +17,12 @@ public class CuisineRegistrationService {
 	private CuisineRepository cuisineRepository;
 	
 	public Cuisine salvar(Cuisine cuisine) {
-		return cuisineRepository.salvar(cuisine);
+		return cuisineRepository.save(cuisine);
 	}
 	
 	public void excluir(Long cuisineId) {
 		try {
-			cuisineRepository.remover(cuisineId);
+			cuisineRepository.deleteById(cuisineId);
 			
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Cozinha de código %d não existe", cuisineId));

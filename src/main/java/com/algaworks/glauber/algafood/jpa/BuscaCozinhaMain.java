@@ -1,5 +1,7 @@
 package com.algaworks.glauber.algafood.jpa;
 
+import java.util.Optional;
+
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -17,7 +19,7 @@ public class BuscaCozinhaMain {
 		
 		CuisineRepository cuisineRepository = applicationContext.getBean(CuisineRepository.class);
 		
-		Cuisine cozinha = cuisineRepository.buscar(1L);
-		System.out.println(cozinha.getName());
+		Optional<Cuisine> cozinhaOptional = cuisineRepository.findById(1L);
+		System.out.println(cozinhaOptional.get().getName());
 	}
 }

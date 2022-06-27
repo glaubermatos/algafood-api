@@ -17,12 +17,12 @@ public class StateRegistrationService {
 	private StateRepository stateRepository;
 
 	public State salvar(State state) {
-		return stateRepository.salvar(state);
+		return stateRepository.save(state);
 	}
 	
 	public void deletar(Long stateId) {
 		try {
-			stateRepository.remover(stateId);
+			stateRepository.deleteById(stateId);
 			
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Estado de código %d não existe", stateId));

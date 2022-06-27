@@ -19,7 +19,7 @@ public class ConsultaStateMain {
 		
 		StateRepository stateRepository = applicationContext.getBean(StateRepository.class);
 		
-		List<State> states = stateRepository.listar();
+		List<State> states = stateRepository.findAll();
 		
 		states.stream().forEach(state -> System.out.printf("%d - %s\n", state.getId(), state.getName()));
 	}

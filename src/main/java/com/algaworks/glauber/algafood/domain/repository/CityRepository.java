@@ -1,13 +1,11 @@
 package com.algaworks.glauber.algafood.domain.repository;
 
-import java.util.List;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.algaworks.glauber.algafood.domain.model.City;
 
-public interface CityRepository {
+@Repository
+public interface CityRepository extends JpaRepository<City, Long> {
 
-	List<City> listar();
-	City buscar(Long id);
-	City salvar(City city);
-	void remover(Long id);
 }

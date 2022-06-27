@@ -24,20 +24,17 @@ public class CityRegistrationService {
 	public City salvar(City city) {
 		Long stateId = city.getState().getId();
 		
-		State state = stateRepository.buscar(stateId);
-		
-		if (state == null) {
-			throw new EntityNotFoundException(String.format("Estado de código %d não existe", stateId));
-		}
+		State state = stateRepository.findById(stateId)
+				.orElseThrow(() -> new EntityNotFoundException(String.format("Estado de código %d não existe", stateId)));
 		
 		city.setState(state);
 		
-		return cityRepository.salvar(city);
+		return cityRepository.save(city);
 	}
 	
 	public void deletar(Long cityId) {
 		try {
-			cityRepository.remover(cityId);
+			cityRepository.deleteById(cityId);
 			
 		} catch (EmptyResultDataAccessException e) {
 			throw new EntityNotFoundException(String.format("Cidade de código %d não existe", cityId));
