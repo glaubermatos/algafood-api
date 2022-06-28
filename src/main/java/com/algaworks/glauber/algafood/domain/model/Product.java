@@ -1,7 +1,6 @@
 package com.algaworks.glauber.algafood.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.math.BigDecimal;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -9,15 +8,12 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 @Entity
-@Table
-public class Cuisine {
-	
+public class Product {
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -25,39 +21,53 @@ public class Cuisine {
 	@Column(nullable = false)
 	private String name;
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "cuisine")
-	private List<Restaurant> restaurants = new ArrayList<>();
-
+	@Column(nullable = false)
+	private String description;
+	
+	@Column(nullable = false)
+	private BigDecimal price;
+	
+	@Column(nullable = false)
+	private Boolean active = true;
+	
+	@ManyToOne
+	@JoinColumn(name = "restaurant_id", nullable = false)
+	private Restaurant restaurant;
+	
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public String getName() {
 		return name;
 	}
-
 	public void setName(String name) {
 		this.name = name;
 	}
-	
-	public List<Restaurant> getRestaurants() {
-		return restaurants;
+	public String getDescription() {
+		return description;
 	}
-
-	public void setRestaurants(List<Restaurant> restaurants) {
-		this.restaurants = restaurants;
+	public void setDescription(String description) {
+		this.description = description;
 	}
-
+	public BigDecimal getPrice() {
+		return price;
+	}
+	public void setPrice(BigDecimal price) {
+		this.price = price;
+	}
+	public Boolean isActive() {
+		return active;
+	}
+	public void setActive(Boolean active) {
+		this.active = active;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);
 	}
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -66,10 +76,10 @@ public class Cuisine {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Cuisine other = (Cuisine) obj;
+		Product other = (Product) obj;
 		return Objects.equals(id, other.id);
 	}
 	
 	
-
+	
 }
