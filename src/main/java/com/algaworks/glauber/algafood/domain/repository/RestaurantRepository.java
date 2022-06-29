@@ -19,6 +19,7 @@ public interface RestaurantRepository extends
 	
 	@Query("select distinct r from Restaurant r left join fetch r.cuisine left join fetch r.paymentMethods left join fetch r.address.city c left join fetch c.state")
 	List<Restaurant> findAll();
+	
 //	@Query("from Restaurant r where r.name like %:name% and r.cuisine.id = :id")
 	List<Restaurant> consultarPorNome(String name, @Param("id") Long cuisineId);	
 	List<Restaurant> findByFreightRateBetween(BigDecimal freightRateInitial, BigDecimal freightRateFinal);

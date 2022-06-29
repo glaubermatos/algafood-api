@@ -44,14 +44,14 @@ public class Restaurant {
 	@JoinColumn(name = "cuisine_id", nullable = false)//padrão do JPA
 	private Cuisine cuisine;
 	
-//	@JsonIgnore
+	@JsonIgnore
 	@ManyToMany
-	@JoinTable(name = "retaurant_payment_method", 
+	@JoinTable(name = "restaurant_payment_method", 
 			joinColumns = @JoinColumn(name = "restaurant_id"), 
 			inverseJoinColumns = @JoinColumn(name = "payment_method_id"))
 	private List<PaymentMethod> paymentMethods = new ArrayList<>();
 	
-//	@JsonIgnore
+	@JsonIgnore
 	@Embedded
 	private Address address;
 	
