@@ -1,5 +1,7 @@
 package com.algaworks.glauber.algafood.domain.service;
 
+import static com.algaworks.glauber.algafood.domain.exception.MessagesExceptions.*;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -7,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.algaworks.glauber.algafood.domain.exception.EntityInUseException;
 import com.algaworks.glauber.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.glauber.algafood.domain.exception.StateNotFoundException;
 import com.algaworks.glauber.algafood.domain.model.State;
 import com.algaworks.glauber.algafood.domain.repository.StateRepository;
 
@@ -25,10 +28,19 @@ public class StateRegistrationService {
 			stateRepository.deleteById(stateId);
 			
 		} catch (EmptyResultDataAccessException e) {
-			throw new EntityNotFoundException(String.format("Estado de código %d não existe", stateId));
+			throw new StateNotFoundException(stateId);
 			
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(String.format("Estado de código %d não pode ser removido, pois está em uso", stateId));
+			throw new EntityInUseException(MSG_ENTITY_IN_USE.formatted("Estado", stateId));
+		}
+	}
+	
+	public State findStateByIdOrElseThrow(Long stateId) {
+		try {
+			return stateRepository.findByIdOrElseThrow(stateId);
+			
+		} catch (EntityNotFoundException e) {
+			throw new StateNotFoundException(stateId);
 		}
 	}
 }

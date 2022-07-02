@@ -1,12 +1,10 @@
 package com.algaworks.glauber.algafood.api.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,10 +12,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.algaworks.glauber.algafood.domain.exception.EntityInUseException;
-import com.algaworks.glauber.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.glauber.algafood.domain.model.Cuisine;
 import com.algaworks.glauber.algafood.domain.repository.CuisineRepository;
 import com.algaworks.glauber.algafood.domain.service.CuisineRegistrationService;
@@ -39,49 +36,63 @@ public class CuisineController {
 	}
 	
 	@GetMapping("/{cuisineId}")
-	public ResponseEntity<Cuisine> buscar(@PathVariable Long cuisineId) {
-		Optional<Cuisine> cozinhaOptional = cuisineRepository.findById(cuisineId);
-		
-		if (cozinhaOptional.isEmpty()) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
-		}
-		
-		return ResponseEntity.status(HttpStatus.OK).body(cozinhaOptional.get());	
+	@ResponseStatus(HttpStatus.OK)
+	public Cuisine buscar(@PathVariable Long cuisineId) {
+		return cuisineRegistrationService.findCuisineByIdOrElseThrow(cuisineId);	
 	}
 	
 	@PostMapping
-	public ResponseEntity<Cuisine> criar(@RequestBody Cuisine cozinha) {
-		cozinha = cuisineRegistrationService.salvar(cozinha);
-		
-		return ResponseEntity.status(HttpStatus.CREATED).body(cozinha);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Cuisine criar(@RequestBody Cuisine cozinha) {
+		return cuisineRegistrationService.salvar(cozinha);
 	}
 	
-	@PutMapping("/{cuizineId}")
-	public ResponseEntity<Cuisine> atualizar(@PathVariable Long cuizineId, @RequestBody Cuisine cozinha) {
-		Optional<Cuisine> currentCuisineOptional = cuisineRepository.findById(cuizineId);
+	@PutMapping("/{cuisineId}")
+	public Cuisine atualizar(@PathVariable Long cuisineId, @RequestBody Cuisine cozinha) {
+		Cuisine currentCuisine = cuisineRegistrationService.findCuisineByIdOrElseThrow(cuisineId);
 		
-		if (currentCuisineOptional.isPresent()) {
-			BeanUtils.copyProperties(cozinha, currentCuisineOptional.get(), "id");
-			
-			Cuisine cuisine = cuisineRegistrationService.salvar(currentCuisineOptional.get());
-			
-			return ResponseEntity.ok(cuisine);
-		}
+		BeanUtils.copyProperties(cozinha, currentCuisine, "id");
 		
-		return ResponseEntity.notFound().build();
+		return cuisineRegistrationService.salvar(currentCuisine);
 	}
+	
+//	@DeleteMapping("/{cuisineId}")
+//	public ResponseEntity<?> remover(@PathVariable Long cuisineId) {		
+//		try {
+//			cuisineRegistrationService.excluir(cuisineId);
+//			return ResponseEntity.noContent().build();
+//			
+//		} catch (EntityNotFoundException e) {
+//			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
+//			
+//		} catch (EntityInUseException e) {
+//			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
+//		}
+//	}
 	
 	@DeleteMapping("/{cuisineId}")
-	public ResponseEntity<?> remover(@PathVariable Long cuisineId) {		
-		try {
-			cuisineRegistrationService.excluir(cuisineId);
-			return ResponseEntity.noContent().build();
-			
-		} catch (EntityNotFoundException e) {
-			return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getMessage());
-			
-		} catch (EntityInUseException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
-		}
+	@ResponseStatus(HttpStatus.NO_CONTENT)
+	public void remover(@PathVariable Long cuisineId) {		
+		cuisineRegistrationService.excluir(cuisineId);
 	}
+	
+	/*
+	 * Sem a necessidade de criar classes de exceptions de domínio, usa a classe
+	 * ResponseStatusException passando o código HTTP desejado,
+	 * O metodo da classe de serviço apenas repassa as exceções para o controller tratálas
+	 * Em projetos pequenos ou MVPs é interessante o uso para ganhar tempo
+	 */
+//	@DeleteMapping("/{cuisineId}")
+//	@ResponseStatus(HttpStatus.NO_CONTENT)
+//	public void remover(@PathVariable Long cuisineId) {		
+//		try {
+//			cuisineRegistrationService.excluir(cuisineId);
+//			
+//		} catch (EmptyResultDataAccessException e) {
+//			throw new ResponseStatusException(HttpStatus.NOT_FOUND, String.format("Cozinha de código %d não existe", cuisineId));
+//			
+//		} catch (DataIntegrityViolationException e) {
+//			throw new ResponseStatusException(HttpStatus.CONFLICT, String.format("Cozinha de código %d não pode ser removida, pois está em uso", cuisineId));
+//		}
+//	}
 }

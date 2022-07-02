@@ -4,9 +4,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.algaworks.glauber.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.glauber.algafood.domain.exception.RestaurantNotFoundException;
 import com.algaworks.glauber.algafood.domain.model.Cuisine;
 import com.algaworks.glauber.algafood.domain.model.Restaurant;
-import com.algaworks.glauber.algafood.domain.repository.CuisineRepository;
 import com.algaworks.glauber.algafood.domain.repository.RestaurantRepository;
 
 @Service
@@ -16,16 +16,23 @@ public class RestaurantRegistrationService {
 	private RestaurantRepository restaurantRepository;
 	
 	@Autowired
-	private CuisineRepository cuisineRepository;
+	private CuisineRegistrationService cuisineRegistrationService;;
 	
 	public Restaurant salvar(Restaurant restaurant) {
 		Long cuisineId = restaurant.getCuisine().getId();
 		
-		Cuisine cuisine = cuisineRepository.findById(cuisineId)
-				.orElseThrow(() -> new EntityNotFoundException(String.format("A cozinha de código %d não existe", cuisineId)));
+		Cuisine cuisine = cuisineRegistrationService.findCuisineByIdOrElseThrow(cuisineId);
 		
 		restaurant.setCuisine(cuisine);
 		
 		return restaurantRepository.save(restaurant);
+	}
+	
+	public Restaurant findRestaurantByIdOrElseThrow(Long id) {
+		try {
+			return restaurantRepository.findByIdOrElseThrow(id);
+		} catch (EntityNotFoundException e) {
+			throw new RestaurantNotFoundException(id);
+		}
 	}
 }
