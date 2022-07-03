@@ -1,8 +1,11 @@
 package com.algaworks.glauber.algafood.api.exceptionhandler.problem;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
+
+import com.algaworks.glauber.algafood.api.exceptionhandler.problem.ApiProblemDetail.Field;
 
 public class ApiProblemDetailBuilder {
 
@@ -11,12 +14,6 @@ public class ApiProblemDetailBuilder {
 	public ApiProblemDetailBuilder() {
 		this.instance = new ApiProblemDetail();
 	}
-	
-//	public ApiProblemDetailBuilder timestamp(LocalDateTime timestamp) {
-//		this.instance.setTimestamp(timestamp);
-//		
-//		return this;
-//	}
 	
 	public ApiProblemDetailBuilder status(Integer status) {
 		this.instance.setStatus(status);
@@ -52,6 +49,12 @@ public class ApiProblemDetailBuilder {
 		this.instance.setTimestamp(timestamp);
 		
 		 return this;
+	}
+	
+	public ApiProblemDetailBuilder fields(List<Field> fieldsError) {
+		this.instance.setFields(fieldsError);
+		
+		return this;
 	}
 	
 	public ApiProblemDetail build() {

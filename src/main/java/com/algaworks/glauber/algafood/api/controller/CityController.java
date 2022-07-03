@@ -2,6 +2,8 @@ package com.algaworks.glauber.algafood.api.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -43,7 +45,7 @@ public class CityController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public City criar(@RequestBody City city) {
+	public City criar(@RequestBody @Valid City city) {
 		try {
 			return cityRegistrationService.salvar(city);			
 		} catch (StateNotFoundException e) {
@@ -52,7 +54,7 @@ public class CityController {
 	}
 	
 	@PutMapping("/{cityId}")
-	public City atualizar(@PathVariable Long cityId, @RequestBody City city) {
+	public City atualizar(@PathVariable Long cityId, @RequestBody @Valid City city) {
 		City currentCity = cityRegistrationService.findCityByIdOrElseThrow(cityId);
 		
 		BeanUtils.copyProperties(city, currentCity, "id");

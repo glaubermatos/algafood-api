@@ -1,6 +1,7 @@
 package com.algaworks.glauber.algafood.api.exceptionhandler.problem;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -18,6 +19,7 @@ public class ApiProblemDetail {
 	protected String detail;
 	protected LocalDateTime timestamp;	
 	protected String userMessage;
+	protected List<Field> fields;;
 	
 	public Integer getStatus() {
 		return status;
@@ -55,6 +57,34 @@ public class ApiProblemDetail {
 	public void setTimestamp(LocalDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
-	
-	
+	public List<Field> getFields() {
+		return fields;
+	}
+	public void setFields(List<Field> fields) {
+		this.fields = fields;
+	}
+
+
+	public static class Field {
+		
+		protected Field() {}
+		
+		protected String name;
+		protected String userMessage;
+		
+		public String getName() {
+			return name;
+		}
+		public void setName(String name) {
+			this.name = name;
+		}
+		public String getUserMessage() {
+			return userMessage;
+		}
+		public void setUserMessage(String message) {
+			this.userMessage = message;
+		}
+		
+		
+	}
 }

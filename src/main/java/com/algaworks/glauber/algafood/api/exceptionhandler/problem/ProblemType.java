@@ -2,6 +2,7 @@ package com.algaworks.glauber.algafood.api.exceptionhandler.problem;
 
 public enum ProblemType {
 
+	INVALID_DATA("Dados inválidos", "/invalid-data"),
 	SYSTEM_ERROR("Erro de sistema", "/system-erro"),
 	REQUEST_URL_INCORRECT("Parâmetros da requisição incorretos", "/request-parameters-incorrect"),
 	REQUEST_BODY_NOT_READABLE("Corpo da requisição imcompreensivo", "/request-body-not-readable"),
