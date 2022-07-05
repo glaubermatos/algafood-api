@@ -41,7 +41,7 @@ public class CityRegistrationService {
 			throw new CityNotFoundException(cityId);
 			
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(MSG_ENTITY_IN_USE.formatted(City.class.getSimpleName(), cityId));
+			throw new EntityInUseException(String.format(MSG_ENTITY_IN_USE, City.class.getSimpleName(), cityId));
 		}
 	}
 	

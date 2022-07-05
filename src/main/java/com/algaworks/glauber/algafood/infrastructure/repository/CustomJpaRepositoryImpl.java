@@ -53,7 +53,7 @@ public class CustomJpaRepositoryImpl<T, ID> extends SimpleJpaRepository<T, ID>
 			return entity;
 			
 		} catch (NoResultException e) {
-			throw new EntityNotFoundException(MSG_ENTITY_NOT_FOUND.formatted(entityClass.getSimpleName(), id));
+			throw new EntityNotFoundException(String.format(MSG_ENTITY_NOT_FOUND, entityClass.getSimpleName(), id));
 		}
 		
 	}

@@ -31,7 +31,7 @@ public class StateRegistrationService {
 			throw new StateNotFoundException(stateId);
 			
 		} catch (DataIntegrityViolationException e) {
-			throw new EntityInUseException(MSG_ENTITY_IN_USE.formatted("Estado", stateId));
+			throw new EntityInUseException(String.format(MSG_ENTITY_IN_USE, "Estado", stateId));
 		}
 	}
 	

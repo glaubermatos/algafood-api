@@ -1,0 +1,7 @@
+{
+	"name": "Sabor da Terra",
+	"freightRate": 12,
+	"cuisine": {
+		"id": 1
+	}
+}
