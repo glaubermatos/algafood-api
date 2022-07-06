@@ -16,6 +16,7 @@ import javax.validation.groups.ConvertGroup;
 import javax.validation.groups.Default;
 
 import com.algaworks.glauber.algafood.core.validation.Groups;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 public class City {
@@ -28,6 +29,7 @@ public class City {
 	@Column(nullable = false)
 	private String name;
 	
+	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@Valid
 	@NotNull
 	@ConvertGroup(from = Default.class, to = Groups.StateId.class)

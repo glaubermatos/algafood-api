@@ -2,23 +2,44 @@ package com.algaworks.glauber.algafood;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import java.math.BigDecimal;
+
 import javax.validation.ConstraintViolationException;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.TestPropertySource;
 
 import com.algaworks.glauber.algafood.domain.exception.EntityInUseException;
 import com.algaworks.glauber.algafood.domain.exception.EntityNotFoundException;
 import com.algaworks.glauber.algafood.domain.model.Cuisine;
+import com.algaworks.glauber.algafood.domain.model.Restaurant;
 import com.algaworks.glauber.algafood.domain.service.CuisineRegistrationService;
+import com.algaworks.glauber.algafood.domain.service.RestaurantRegistrationService;
+import com.algaworks.glauber.algafood.util.DatabaseCleaner;
 
 @SpringBootTest
+@TestPropertySource("/application-test.properties")
 class CuisineRegistrationIT {
 
 	@Autowired
 	private CuisineRegistrationService cuisineRegistrationService;
+	
+	@Autowired
+	private RestaurantRegistrationService restaurantRegistrationService;
+	
+	@Autowired
+	private DatabaseCleaner databaseCleaner;
+	
+	private Cuisine cuisineJaponesa;
+	
+	@BeforeEach
+	public void setUp() {
+		databaseCleaner.clearTables();
+	}
 	
 	@Test
 	void shouldAssignId_WhenRegisteringCuisineWithCorrectData() {
@@ -57,12 +78,12 @@ class CuisineRegistrationIT {
 	@Test
 	public void shouldFail_WhenDeleteCuisineInUse() {
 		//cenário
-		Long cuisineId = 1L;
-		
+		prepareData();		
+		System.out.println("=====================> cuisineJaponesa.id "+cuisineJaponesa.getId());
 		//ação
 		EntityInUseException expectedError = 
 				Assertions.assertThrows(EntityInUseException.class, () -> {
-					cuisineRegistrationService.excluir(cuisineId);
+					cuisineRegistrationService.excluir(cuisineJaponesa.getId());
 				});
 		
 		//validação
@@ -82,6 +103,21 @@ class CuisineRegistrationIT {
 		
 		//validação
 		assertThat(expectedError).isNotNull();
+	}
+	
+	public void prepareData() {
+		cuisineJaponesa = new Cuisine();
+		cuisineJaponesa.setName("Japonesa");
+		
+		cuisineJaponesa = cuisineRegistrationService.salvar(cuisineJaponesa);
+		
+		
+		Restaurant burguerTopRestaurant = new Restaurant();
+		burguerTopRestaurant.setName("Burguer Top");
+		burguerTopRestaurant.setFreightRate(new BigDecimal("11.5"));
+		burguerTopRestaurant.setCuisine(cuisineJaponesa);
+		
+		restaurantRegistrationService.salvar(burguerTopRestaurant);
 	}
 
 }

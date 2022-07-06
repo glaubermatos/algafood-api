@@ -1,5 +1,7 @@
 package com.algaworks.glauber.algafood.domain.service;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,7 @@ public class RestaurantRegistrationService {
 	@Autowired
 	private CuisineRegistrationService cuisineRegistrationService;;
 	
+	@Transactional
 	public Restaurant salvar(Restaurant restaurant) {
 		Long cuisineId = restaurant.getCuisine().getId();
 		
@@ -28,6 +31,7 @@ public class RestaurantRegistrationService {
 		return restaurantRepository.save(restaurant);
 	}
 	
+	@Transactional
 	public Restaurant findRestaurantByIdOrElseThrow(Long id) {
 		try {
 			return restaurantRepository.findByIdOrElseThrow(id);

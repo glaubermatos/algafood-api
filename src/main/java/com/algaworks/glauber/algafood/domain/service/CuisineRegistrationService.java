@@ -2,6 +2,8 @@ package com.algaworks.glauber.algafood.domain.service;
 
 import static com.algaworks.glauber.algafood.domain.exception.MessagesExceptions.MSG_ENTITY_IN_USE;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -19,13 +21,16 @@ public class CuisineRegistrationService {
 	@Autowired
 	private CuisineRepository cuisineRepository;
 	
+	@Transactional
 	public Cuisine salvar(Cuisine cuisine) {
 		return cuisineRepository.save(cuisine);
 	}
 	
+	@Transactional
 	public void excluir(Long cuisineId) {
 		try {
 			cuisineRepository.deleteById(cuisineId);
+			cuisineRepository.flush();
 			
 		} catch (EmptyResultDataAccessException e) {
 			throw new CuisineNotFoundException(cuisineId);

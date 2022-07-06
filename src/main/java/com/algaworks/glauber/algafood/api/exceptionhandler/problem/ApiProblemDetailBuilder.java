@@ -1,6 +1,6 @@
 package com.algaworks.glauber.algafood.api.exceptionhandler.problem;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import org.apache.commons.lang3.StringUtils;
@@ -45,7 +45,7 @@ public class ApiProblemDetailBuilder {
 		return this;
 	}
 	
-	public ApiProblemDetailBuilder timestamp(LocalDateTime timestamp) {
+	public ApiProblemDetailBuilder timestamp(OffsetDateTime timestamp) {
 		this.instance.setTimestamp(timestamp);
 		
 		 return this;

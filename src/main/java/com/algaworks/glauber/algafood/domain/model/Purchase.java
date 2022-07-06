@@ -1,7 +1,7 @@
 package com.algaworks.glauber.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -38,16 +38,16 @@ public class Purchase {
 
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime confirmationDate;
+	private OffsetDateTime confirmationDate;
 
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime cancellationDate;
+	private OffsetDateTime cancellationDate;
 
 	@Column(columnDefinition = "datetime")
-	private LocalDateTime deliveryDate;
+	private OffsetDateTime deliveryDate;
 	
 	@Enumerated(EnumType.STRING)
 	@Column(nullable = false)
@@ -103,35 +103,35 @@ public class Purchase {
 		this.totalAmount = totalAmount;
 	}
 
-	public LocalDateTime getCreatedAt() {
+	public OffsetDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(OffsetDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDateTime getConfirmationDate() {
+	public OffsetDateTime getConfirmationDate() {
 		return confirmationDate;
 	}
 
-	public void setConfirmationDate(LocalDateTime confirmationDate) {
+	public void setConfirmationDate(OffsetDateTime confirmationDate) {
 		this.confirmationDate = confirmationDate;
 	}
 
-	public LocalDateTime getCancellationDate() {
+	public OffsetDateTime getCancellationDate() {
 		return cancellationDate;
 	}
 
-	public void setCancellationDate(LocalDateTime cancellationDate) {
+	public void setCancellationDate(OffsetDateTime cancellationDate) {
 		this.cancellationDate = cancellationDate;
 	}
 
-	public LocalDateTime getDeliveryDate() {
+	public OffsetDateTime getDeliveryDate() {
 		return deliveryDate;
 	}
 
-	public void setDeliveryDate(LocalDateTime deliveryDate) {
+	public void setDeliveryDate(OffsetDateTime deliveryDate) {
 		this.deliveryDate = deliveryDate;
 	}
 

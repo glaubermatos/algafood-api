@@ -1,7 +1,7 @@
 package com.algaworks.glauber.algafood.domain.model;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -48,12 +48,12 @@ public class Restaurant {
 	@Column(name = "freight_rate", nullable = false)//opcional o hibernate ja cria nesse padrão
 	private BigDecimal freightRate;
 	
+	@JsonIgnoreProperties(value = "name", allowGetters = true)
 	@Valid
 	@ConvertGroup(from = Default.class, to = Groups.CuisineId.class)
 	@NotNull
 //	@JsonIgnore
-	@JsonIgnoreProperties("hibernateLazyInitializer")
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)//se for usar como lazy precisa adicionar o @IgnoreProperties para hibernateLazyInitializer
 	@JoinColumn(name = "cuisine_id", nullable = false)//padrão do JPA
 	private Cuisine cuisine;
 	
@@ -68,15 +68,15 @@ public class Restaurant {
 	@Embedded
 	private Address address;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@CreationTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime createdAt;
+	private OffsetDateTime createdAt;
 	
-	@JsonIgnore
+//	@JsonIgnore
 	@UpdateTimestamp
 	@Column(nullable = false, columnDefinition = "datetime")
-	private LocalDateTime updatedAt;
+	private OffsetDateTime updatedAt;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy = "restaurant")
@@ -130,19 +130,19 @@ public class Restaurant {
 		this.address = address;
 	}
 	
-	public LocalDateTime getCreatedAt() {
+	public OffsetDateTime getCreatedAt() {
 		return createdAt;
 	}
 
-	public void setCreatedAt(LocalDateTime createdAt) {
+	public void setCreatedAt(OffsetDateTime createdAt) {
 		this.createdAt = createdAt;
 	}
 
-	public LocalDateTime getUpdatedAt() {
+	public OffsetDateTime getUpdatedAt() {
 		return updatedAt;
 	}
 
-	public void setUpdatedAt(LocalDateTime updatedAt) {
+	public void setUpdatedAt(OffsetDateTime updatedAt) {
 		this.updatedAt = updatedAt;
 	}
 

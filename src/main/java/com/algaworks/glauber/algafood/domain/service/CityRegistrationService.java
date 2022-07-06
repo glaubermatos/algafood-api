@@ -2,6 +2,8 @@ package com.algaworks.glauber.algafood.domain.service;
 
 import static com.algaworks.glauber.algafood.domain.exception.MessagesExceptions.MSG_ENTITY_IN_USE;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -23,6 +25,7 @@ public class CityRegistrationService {
 	@Autowired
 	private StateRegistrationService stateRegistrationService;
 
+	@Transactional
 	public City salvar(City city) {
 		Long stateId = city.getState().getId();
 		
@@ -33,9 +36,11 @@ public class CityRegistrationService {
 		return cityRepository.save(city);
 	}
 	
+	@Transactional
 	public void deletar(Long cityId) {
 		try {
 			cityRepository.deleteById(cityId);
+			cityRepository.flush();
 			
 		} catch (EmptyResultDataAccessException e) {
 			throw new CityNotFoundException(cityId);

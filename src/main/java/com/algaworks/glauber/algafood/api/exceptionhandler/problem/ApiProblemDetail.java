@@ -1,6 +1,6 @@
 package com.algaworks.glauber.algafood.api.exceptionhandler.problem;
 
-import java.time.LocalDateTime;
+import java.time.OffsetDateTime;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -17,7 +17,7 @@ public class ApiProblemDetail {
 	protected String type;
 	protected String title;
 	protected String detail;
-	protected LocalDateTime timestamp;	
+	protected OffsetDateTime timestamp;	
 	protected String userMessage;
 	protected List<Field> fields;;
 	
@@ -51,10 +51,10 @@ public class ApiProblemDetail {
 	public void setUserMessage(String userMessage) {
 		this.userMessage = userMessage;
 	}
-	public LocalDateTime getTimestamp() {
+	public OffsetDateTime getTimestamp() {
 		return timestamp;
 	}
-	public void setTimestamp(LocalDateTime timestamp) {
+	public void setTimestamp(OffsetDateTime timestamp) {
 		this.timestamp = timestamp;
 	}
 	public List<Field> getFields() {
