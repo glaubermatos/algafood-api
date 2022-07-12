@@ -3,5 +3,15 @@
 	"freightRate": 12,
 	"cuisine": {
 		
+	},
+	"address": {
+		"postalCode": "45320-000",
+		"street": "Rua Ademar Alves",
+		"number": "116",
+		"complement": null,
+		"district": "Centro",
+		"city": {
+			"id": 2
+		}
 	}
 }

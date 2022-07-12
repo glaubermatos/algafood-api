@@ -20,6 +20,10 @@ public class RestaurantInput {
 	@NotNull
 	private CuisineInputId cuisine;
 	
+	@Valid
+	@NotNull
+	private AddressInput address;
+	
 	public String getName() {
 		return name;
 	}
@@ -37,6 +41,12 @@ public class RestaurantInput {
 	}
 	public void setCuisine(CuisineInputId cuisine) {
 		this.cuisine = cuisine;
+	}
+	public AddressInput getAddress() {
+		return address;
+	}
+	public void setAddress(AddressInput address) {
+		this.address = address;
 	}
 	
 }

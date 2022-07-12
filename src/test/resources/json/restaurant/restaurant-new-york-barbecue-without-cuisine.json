@@ -1,4 +1,14 @@
 {
 	"name": "New york barbecue",
-	"freightRate": 12
+	"freightRate": 12,
+	"address": {
+		"postalCode": "45320-000",
+		"street": "Rua Ademar Alves",
+		"number": "116",
+		"complement": null,
+		"district": "Centro",
+		"city": {
+			"id": 2
+		}
+	}
 }

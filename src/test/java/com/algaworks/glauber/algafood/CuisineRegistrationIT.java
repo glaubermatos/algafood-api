@@ -15,10 +15,15 @@ import org.springframework.test.context.TestPropertySource;
 
 import com.algaworks.glauber.algafood.domain.exception.EntityInUseException;
 import com.algaworks.glauber.algafood.domain.exception.EntityNotFoundException;
+import com.algaworks.glauber.algafood.domain.model.Address;
+import com.algaworks.glauber.algafood.domain.model.City;
 import com.algaworks.glauber.algafood.domain.model.Cuisine;
 import com.algaworks.glauber.algafood.domain.model.Restaurant;
+import com.algaworks.glauber.algafood.domain.model.State;
+import com.algaworks.glauber.algafood.domain.service.CityRegistrationService;
 import com.algaworks.glauber.algafood.domain.service.CuisineRegistrationService;
 import com.algaworks.glauber.algafood.domain.service.RestaurantRegistrationService;
+import com.algaworks.glauber.algafood.domain.service.StateRegistrationService;
 import com.algaworks.glauber.algafood.util.DatabaseCleaner;
 
 @SpringBootTest
@@ -30,6 +35,12 @@ class CuisineRegistrationIT {
 	
 	@Autowired
 	private RestaurantRegistrationService restaurantRegistrationService;
+	
+	@Autowired
+	private CityRegistrationService cityRegistrationService;
+	
+	@Autowired
+	private StateRegistrationService stateRegistrationService;
 	
 	@Autowired
 	private DatabaseCleaner databaseCleaner;
@@ -116,6 +127,25 @@ class CuisineRegistrationIT {
 		burguerTopRestaurant.setName("Burguer Top");
 		burguerTopRestaurant.setFreightRate(new BigDecimal("11.5"));
 		burguerTopRestaurant.setCuisine(cuisineJaponesa);
+		
+		State state = new State();
+		state.setName("Bahia");		
+		state = stateRegistrationService.salvar(state);
+		
+		City city = new City();
+		city.setName("Jaguaquara");
+		city.setState(state);
+		city = cityRegistrationService.salvar(city);
+			
+		
+		Address address = new Address();
+		address.setCity(city);
+		address.setDistrict("Palmeira");
+		address.setNumber("890");
+		address.setPostalCode("45340-000");
+		address.setStreet("Rua Pedro Santos");
+		
+		burguerTopRestaurant.setAddress(address);
 		
 		restaurantRegistrationService.salvar(burguerTopRestaurant);
 	}

@@ -64,6 +64,12 @@ public class Product {
 	public void setActive(Boolean active) {
 		this.active = active;
 	}
+	public Restaurant getRestaurant() {
+		return restaurant;
+	}
+	public void setRestaurant(Restaurant restaurant) {
+		this.restaurant = restaurant;
+	}
 	@Override
 	public int hashCode() {
 		return Objects.hash(id);

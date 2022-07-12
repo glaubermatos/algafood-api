@@ -40,47 +40,42 @@ public class PurchaseItem {
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Integer getQuantity() {
 		return quantity;
 	}
-
 	public void setQuantity(Integer quantity) {
 		this.quantity = quantity;
 	}
-
 	public BigDecimal getUnitPrice() {
 		return unitPrice;
 	}
-
 	public void setUnitPrice(BigDecimal unitPrice) {
 		this.unitPrice = unitPrice;
 	}
-
 	public BigDecimal getTotalPrice() {
 		return totalPrice;
 	}
-
 	public void setTotalPrice(BigDecimal totalPrice) {
 		this.totalPrice = totalPrice;
 	}
-
 	public String getNote() {
 		return note;
 	}
-
 	public void setNote(String note) {
 		this.note = note;
 	}
-
+	public Purchase getPurchase() {
+		return purchase;
+	}
+	public void setPurchase(Purchase purchase) {
+		this.purchase = purchase;
+	}
 	public Product getProduct() {
 		return product;
 	}
-
 	public void setProduct(Product product) {
 		this.product = product;
 	}
@@ -102,4 +97,18 @@ public class PurchaseItem {
 		return Objects.equals(id, other.id);
 	}
 	
+	public void calculateTotalPrice() {
+		BigDecimal unitPrice = this.getUnitPrice();
+		Integer quantity = this.getQuantity();
+		
+		if (unitPrice == null) {
+			unitPrice = BigDecimal.ZERO;
+		}
+		
+		if (quantity == null) {
+			quantity = 0;
+		}
+		
+		setTotalPrice(unitPrice.multiply(new BigDecimal(quantity)) );
+	}
 }

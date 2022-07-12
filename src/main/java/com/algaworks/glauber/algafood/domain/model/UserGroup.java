@@ -1,7 +1,8 @@
 package com.algaworks.glauber.algafood.domain.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -26,5 +27,49 @@ public class UserGroup {
 	@JoinTable(name = "user_group_permission", 
 			joinColumns = @JoinColumn(name = "user_group_id"),
 			inverseJoinColumns = @JoinColumn(name = "permission_id"))
-	private List<Permission> permissions = new ArrayList<>();
+	private Set<Permission> permissions = new HashSet<>();
+
+	public Long getId() {
+		return id;
+	}
+	public void setId(Long id) {
+		this.id = id;
+	}
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public Set<Permission> getPermissions() {
+		return permissions;
+	}
+	public void setPermissions(Set<Permission> permissions) {
+		this.permissions = permissions;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(id);
+	}
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		UserGroup other = (UserGroup) obj;
+		return Objects.equals(id, other.id);
+	}
+
+	public void associatePermission(Permission permission) {
+		getPermissions().add(permission);
+	}
+	
+	public void disassociatePermission(Permission permission) {
+		getPermissions().remove(permission);
+	}
+	
 }
