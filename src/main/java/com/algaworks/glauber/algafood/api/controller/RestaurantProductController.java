@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -45,9 +46,17 @@ public class RestaurantProductController {
 	private ProductRegistrationService productRegistrationService;
 	
 	@GetMapping
-	public List<ProductModel> index(@PathVariable Long restaurantId) {
+	public List<ProductModel> index(@PathVariable Long restaurantId, @RequestParam(value = "include-inactive", required = false) boolean includeInactive) {
 		Restaurant restaurant = restaurantRegistrationService.findRestaurantByIdOrElseThrow(restaurantId);
-		List<Product> products = productRepository.findByRestaurant(restaurant);
+		
+		List<Product> products = null;
+		
+		if (includeInactive) {
+			products = productRepository.findAllByRestaurant(restaurant);
+		} else {
+			products = productRepository.findByRestaurantActives(restaurant);
+		}
+		
 		
 		return productModelAssembler.toCollectionModel(products); 
 	}

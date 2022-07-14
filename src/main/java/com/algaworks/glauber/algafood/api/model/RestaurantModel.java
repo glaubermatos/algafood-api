@@ -2,12 +2,23 @@ package com.algaworks.glauber.algafood.api.model;
 
 import java.math.BigDecimal;
 
+import com.algaworks.glauber.algafood.api.model.view.RestaurantView;
+import com.fasterxml.jackson.annotation.JsonView;
+
 public class RestaurantModel {
 	
+	@JsonView({RestaurantView.Summary.class, RestaurantView.JustName.class})
 	private Long id;
+
+	@JsonView({RestaurantView.Summary.class, RestaurantView.JustName.class})
 	private String name;
+	
+	@JsonView(RestaurantView.Summary.class)
 	private BigDecimal freightRate;
+	
+	@JsonView(RestaurantView.Summary.class)
 	private CuisineModel cuisine;
+	
 	private Boolean active;
 	private Boolean open;
 	private AddressModel address;

@@ -3,6 +3,8 @@ package com.algaworks.glauber.algafood.api.model;
 import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 
+//JsonFilter utilizado junto com a classe MappingJacksonValue para filtrar os campos retornados para o client
+//@JsonFilter("purchaseFilter")//removida para uso do filtro com specification
 public class PurchaseSummaryModel {
 
 	private String code;

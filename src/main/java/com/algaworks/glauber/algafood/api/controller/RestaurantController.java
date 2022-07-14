@@ -20,6 +20,7 @@ import com.algaworks.glauber.algafood.api.assembler.RestaurantInputDisassembler;
 import com.algaworks.glauber.algafood.api.assembler.RestaurantModelAssembler;
 import com.algaworks.glauber.algafood.api.model.RestaurantModel;
 import com.algaworks.glauber.algafood.api.model.input.RestaurantInput;
+import com.algaworks.glauber.algafood.api.model.view.RestaurantView;
 import com.algaworks.glauber.algafood.domain.exception.BusinessException;
 import com.algaworks.glauber.algafood.domain.exception.CityNotFoundException;
 import com.algaworks.glauber.algafood.domain.exception.CuisineNotFoundException;
@@ -27,6 +28,7 @@ import com.algaworks.glauber.algafood.domain.exception.RestaurantNotFoundExcepti
 import com.algaworks.glauber.algafood.domain.model.Restaurant;
 import com.algaworks.glauber.algafood.domain.repository.RestaurantRepository;
 import com.algaworks.glauber.algafood.domain.service.RestaurantRegistrationService;
+import com.fasterxml.jackson.annotation.JsonView;
 
 @RestController
 @RequestMapping("/restaurants")
@@ -44,13 +46,49 @@ public class RestaurantController {
 	@Autowired
 	private RestaurantInputDisassembler restaurantInputDisassembler;
 
+	@JsonView(RestaurantView.Summary.class)
 	@GetMapping
-	public List<RestaurantModel> listar() {
+	public List<RestaurantModel> index() {
 		return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
 	}
 
+	@JsonView(RestaurantView.JustName.class)
+	@GetMapping(params = "projection=just_name")
+	public List<RestaurantModel> indexJustName() {
+		return index();
+	}
+
+//	@GetMapping
+//	public MappingJacksonValue index(@RequestParam(required = false) String projection) {
+//		List<Restaurant> restaurants = restaurantRepository.findAll();
+//		List<RestaurantModel> restaurantsModel = restaurantModelAssembler.toCollectionModel(restaurants);
+//		
+//		MappingJacksonValue restaurantsWrapper = new MappingJacksonValue(restaurantsModel);
+//		restaurantsWrapper.setSerializationView(RestaurantView.Summary.class);
+//		
+//		if ("just_name".equals(projection)) {
+//			restaurantsWrapper.setSerializationView(RestaurantView.JustName.class);
+//			
+//		} else if ("complete".equals(projection)) {
+//			restaurantsWrapper.setSerializationView(null);
+//		}
+//		
+//		return restaurantsWrapper;
+//	}
+	
+//	@GetMapping
+//	public List<RestaurantModel> index() {
+//		return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
+//	}
+//
+//	@JsonView(RestaurantView.Summary.class)
+//	@GetMapping(params = "projection=summary")
+//	public List<RestaurantModel> indexSummary() {
+//		return index();
+//	}
+	
 	@GetMapping("/{restaurantId}")
-	public RestaurantModel buscar(@PathVariable Long restaurantId) {
+	public RestaurantModel show(@PathVariable Long restaurantId) {
 //		if (true) {
 //			throw new IllegalArgumentException("teste");
 //		}
@@ -59,7 +97,7 @@ public class RestaurantController {
 	
 	@PostMapping
 	@ResponseStatus(HttpStatus.CREATED)
-	public RestaurantModel criar(@RequestBody @Valid RestaurantInput restaurantInput) {
+	public RestaurantModel create(@RequestBody @Valid RestaurantInput restaurantInput) {
 		try {
 			return restaurantModelAssembler.toModel(restaurantRegistrationService.salvar(restaurantInputDisassembler.toDomainObject(restaurantInput)));
 		} catch (CuisineNotFoundException | CityNotFoundException e) {
@@ -68,7 +106,7 @@ public class RestaurantController {
 	}
 	
 	@PutMapping("/{restaurantId}")
-	public RestaurantModel atualizar(@PathVariable Long restaurantId, @RequestBody @Valid RestaurantInput restaurantInput) {
+	public RestaurantModel update(@PathVariable Long restaurantId, @RequestBody @Valid RestaurantInput restaurantInput) {
 		Restaurant currentRestaurant = restaurantRegistrationService.findRestaurantByIdOrElseThrow(restaurantId);
 		
 		restaurantInputDisassembler.copyToDomainObject(restaurantInput, currentRestaurant);

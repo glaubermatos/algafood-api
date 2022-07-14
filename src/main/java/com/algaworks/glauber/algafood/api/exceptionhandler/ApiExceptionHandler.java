@@ -13,6 +13,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.validation.BindException;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -40,12 +42,24 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 	private MessageSource messageSource;
 	
 	@Override
+	protected ResponseEntity<Object> handleBindException(BindException ex, HttpHeaders headers, HttpStatus status,
+			WebRequest request) {
+		
+		return handleExceptionInternal(ex, headers, status, request, ex.getBindingResult());
+	}
+	
+	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex,
 			HttpHeaders headers, HttpStatus status, WebRequest request) {
 		
+		return handleExceptionInternal(ex, headers, status, request, ex.getBindingResult());
+	}
+
+	private ResponseEntity<Object> handleExceptionInternal(Exception ex, HttpHeaders headers,
+			HttpStatus status, WebRequest request, BindingResult bindResult) {
 		var problemType = ProblemType.INVALID_DATA;
 		
-		var fieldsError = ex.getFieldErrors().stream()
+		var fieldsError = bindResult.getFieldErrors().stream()
 				.map((fieldErro) -> {
 					String message = messageSource.getMessage(fieldErro, LocaleContextHolder.getLocale());
 					
@@ -56,10 +70,10 @@ public class ApiExceptionHandler extends ResponseEntityExceptionHandler {
 				})
 				.collect(Collectors.toList());
 		
-		var hasManyFieldsWithError = ex.getFieldErrorCount() > 1;
+		var hasManyFieldsWithError = bindResult.getFieldErrorCount() > 1;
 		
 		var detail = String.format("(%d) campo%s est%s inválido%s. Preencha corretamente e tente novamente", 
-				ex.getErrorCount(),
+				bindResult.getErrorCount(),
 				hasManyFieldsWithError ? "s" : "",
 				hasManyFieldsWithError ? "ão" : "á",
 				hasManyFieldsWithError ? "s" : "");
