@@ -44,7 +44,7 @@ O algafood-api é um MVP de uma plataforma de delivery de comida, está sendo de
 - **[x] - 11 - Boas práticas e técnicas para APIs**;
 - **[x] - 12 - Modelagem avançada e implementação da API**;
 - **[x] - 13 - Modelagem de projeções, pesquisas e relatórios**;
-- [ ] - 14 - Upload e download de arquivos;
+- **[x] - 14 - Upload e download de arquivos - Armazenamento em storage local e S3**;
 - [ ] - 15 - E-mails transacionais e Domain Eventse;
 - [ ] - 16 - CORS e consumo da API com JavaScript e Java;
 - [ ] - 17 - Cache de HTTP;

@@ -1,14 +1,12 @@
 package com.algaworks.glauber.algafood.jpa;
 
-import java.util.List;
-
 import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import com.algaworks.glauber.algafood.AlgafoodApiApplication;
-import com.algaworks.glauber.algafood.domain.model.PurchaseItem;
-import com.algaworks.glauber.algafood.domain.repository.PurchaseItemRepository;
+import com.algaworks.glauber.algafood.domain.model.Purchase;
+import com.algaworks.glauber.algafood.domain.repository.PurchaseRepository;
 
 public class ConsultaItensDoPedidoMain {
 
@@ -17,10 +15,10 @@ public class ConsultaItensDoPedidoMain {
 					.web(WebApplicationType.NONE)
 					.run(args);
 		
-		PurchaseItemRepository purchaseItemRepository = applicationContext.getBean(PurchaseItemRepository.class);
+		PurchaseRepository purchaseRepository = applicationContext.getBean(PurchaseRepository.class);
 		
-		List<PurchaseItem> itens = purchaseItemRepository.findAll();
+		Purchase purchase = purchaseRepository.findById(1L).orElseThrow(() -> new RuntimeException());
 		
-		System.out.println(itens.size());
+		System.out.println(purchase.getItems().size());
 	}
 }
