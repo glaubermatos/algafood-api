@@ -6,17 +6,23 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.algaworks.glauber.algafood.domain.model.Purchase;
+import com.algaworks.glauber.algafood.domain.repository.PurchaseRepository;
 
 @Service
 public class PurchaseStatusFlowService {
 	
 	@Autowired
 	private PurchaseRegistrationService perPurchaseRegistrationService;
+	
+	@Autowired
+	private PurchaseRepository purchaseRepository;
 
 	@Transactional
 	public void confirmation(String purchaseCode) {
 		Purchase purchase = perPurchaseRegistrationService.findPurchaseByCodeOrElseThrow(purchaseCode);
 		purchase.confirm();
+		
+		purchaseRepository.save(purchase);
 	}
 
 	@Transactional
@@ -37,5 +43,7 @@ public class PurchaseStatusFlowService {
 //		}
 		
 		purchase.cancel();
+		
+		purchaseRepository.save(purchase);//não precisa chamar o método save, necessário apenas devido ao eventos
 	}
 }

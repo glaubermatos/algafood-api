@@ -23,11 +23,14 @@ import javax.persistence.OneToMany;
 import javax.persistence.PrePersist;
 
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.AbstractAggregateRoot;
 
+import com.algaworks.glauber.algafood.domain.event.CanceledPurchaseEvent;
+import com.algaworks.glauber.algafood.domain.event.ConfirmedPurchaseEvent;
 import com.algaworks.glauber.algafood.domain.exception.BusinessException;
 
 @Entity
-public class Purchase {
+public class Purchase extends AbstractAggregateRoot<Purchase> {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -207,6 +210,8 @@ public class Purchase {
 	public void confirm() {
 		setStatus(PurchaseStatus.CONFIRMED);
 		setConfirmationDate(OffsetDateTime.now());
+		
+		registerEvent(new ConfirmedPurchaseEvent(this));
 	}
 	
 	public void deliver() {
@@ -217,6 +222,8 @@ public class Purchase {
 	public void cancel() {
 		setStatus(PurchaseStatus.CANCELED);
 		setCancellationDate(OffsetDateTime.now());
+		
+		registerEvent(new CanceledPurchaseEvent(this));
 	}
 	
 	private void setStatus(PurchaseStatus newStatus) {

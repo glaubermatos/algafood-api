@@ -19,7 +19,7 @@ public class PurchaseItem {
 	private Long id;
 	
 	@Column(nullable = false)
-	private Integer quantity;
+	private Integer quantity; 
 
 	@Column(nullable = false)
 	private BigDecimal unitPrice;

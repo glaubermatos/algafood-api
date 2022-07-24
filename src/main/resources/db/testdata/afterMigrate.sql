@@ -83,7 +83,9 @@ INSERT INTO user (id, name, email, password, created_at) VALUES
 (2, 'Maria Joaquina', 'maria.vnd@algafood.com', '123', utc_timestamp),
 (3, 'José Souza', 'jose.aux@algafood.com', '123', utc_timestamp),
 (4, 'Sebastião Martins', 'sebastiao.cad@algafood.com', '123', utc_timestamp),
-(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp);   
+(5, 'Manoel Lima', 'manoel.loja@gmail.com', '123', utc_timestamp),
+(6, 'Débora Mendonça', 'glaub.oliveira@hotmail.com', '123', utc_timestamp),
+(7, 'Manoel Lima', 'glaub.oliveira@hotmail.com', '123', utc_timestamp);   
 
 INSERT INTO user_user_group (user_id, user_group_id) VALUES (1, 2), (1, 2), (2, 2);
 
@@ -91,7 +93,7 @@ INSERT INTO restaurant_user_responsible (restaurant_id, user_id) VALUES (1, 5), 
 
 INSERT INTO purchase (id, code, restaurant_id, user_client_id, payment_method_id, address_city_id, address_postal_code, 
     address_street, address_number, address_complement, address_district,
-    status, created_at, subtotal, freight_rate, total_amount) VALUES (1, 'c3ce353a-03ec-4d21-96ea-1d44e3a8ef85', 1, 1, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
+    status, created_at, subtotal, freight_rate, total_amount) VALUES (1, 'c3ce353a-03ec-4d21-96ea-1d44e3a8ef85', 1, 6, 1, 1, '38400-000', 'Rua Floriano Peixoto', '500', 'Apto 801', 'Brasil',
 'CREATED', utc_timestamp, 298.90, 10, 308.90);
 
 INSERT INTO purchase_item (id, purchase_id, product_id, quantity, unit_price, total_price, note) VALUES (1, 1, 1, 1, 78.9, 78.9, null);
@@ -100,21 +102,21 @@ INSERT INTO purchase_item (id, purchase_id, product_id, quantity, unit_price, to
 
 INSERT INTO purchase (id, code, restaurant_id, user_client_id, payment_method_id, address_city_id, address_postal_code, 
     address_street, address_number, address_complement, address_district,
-    status, created_at, subtotal, freight_rate, total_amount) VALUES (2, 'b95811e1-583a-4cbb-9bb6-01fe2bc90793', 4, 1, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
+    status, created_at, subtotal, freight_rate, total_amount) VALUES (2, 'b95811e1-583a-4cbb-9bb6-01fe2bc90793', 4, 6, 2, 1, '38400-111', 'Rua Acre', '300', 'Casa 2', 'Centro',
 'CREATED', utc_timestamp, 79, 0, 79);
 
 INSERT INTO purchase_item (id, purchase_id, product_id, quantity, unit_price, total_price, note) VALUES (3, 2, 6, 1, 79, 79, 'Ao ponto');
 
 INSERT INTO purchase (id, code, restaurant_id, user_client_id, payment_method_id, address_city_id, address_postal_code, 
     address_street, address_number, address_complement, address_district,
-    status, created_at, confirmation_date, delivery_date, subtotal, freight_rate, total_amount) VALUES (3, 'b5741512-8fbc-47fa-9ac1-b530354fc0ff', 1, 1, 1, 1, '38400-222', 'Rua Natal', '200', null, 'Brasil',
+    status, created_at, confirmation_date, delivery_date, subtotal, freight_rate, total_amount) VALUES (3, 'b5741512-8fbc-47fa-9ac1-b530354fc0ff', 1, 7, 1, 1, '38400-222', 'Rua Natal', '200', null, 'Brasil',
         'DELIVERED', '2019-10-30 21:10:00', '2019-10-30 21:10:45', '2019-10-30 21:55:44', 110, 10, 120);
 
 INSERT INTO purchase_item (id, purchase_id, product_id, quantity, unit_price, total_price, note) VALUES (4, 3, 2, 1, 110, 110, null);
 
 INSERT INTO purchase (id, code, restaurant_id, user_client_id, payment_method_id, address_city_id, address_postal_code, 
     address_street, address_number, address_complement, address_district,
-    status, created_at, confirmation_date, delivery_date, subtotal, freight_rate, total_amount) VALUES (4, '5c621c9a-ba61-4454-8631-8aabefe58dc2', 1, 2, 1, 1, '38400-800', 'Rua Fortaleza', '900', 'Apto 504', 'Centro',
+    status, created_at, confirmation_date, delivery_date, subtotal, freight_rate, total_amount) VALUES (4, '5c621c9a-ba61-4454-8631-8aabefe58dc2', 1, 7, 1, 1, '38400-800', 'Rua Fortaleza', '900', 'Apto 504', 'Centro',
         'DELIVERED', '2019-11-02 20:34:04', '2019-11-02 20:35:10', '2019-11-02 21:10:32', 174.4, 5, 179.4);
 
 INSERT INTO purchase_item (id, purchase_id, product_id, quantity, unit_price, total_price, note) VALUES (5, 4, 3, 2, 87.2, 174.4, null);
