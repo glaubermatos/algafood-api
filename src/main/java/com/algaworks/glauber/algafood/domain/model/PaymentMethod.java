@@ -1,5 +1,6 @@
 package com.algaworks.glauber.algafood.domain.model;
 
+import java.time.OffsetDateTime;
 import java.util.Objects;
 
 import javax.persistence.Column;
@@ -7,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 public class PaymentMethod {
@@ -17,6 +20,10 @@ public class PaymentMethod {
 	
 	@Column(nullable = false)
 	private String description;
+	
+	@UpdateTimestamp
+	@Column(nullable = false, columnDefinition = "datetime")
+	private OffsetDateTime updatedAt;
 
 	public Long getId() {
 		return id;

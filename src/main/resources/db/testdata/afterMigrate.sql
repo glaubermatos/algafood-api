@@ -50,9 +50,9 @@ INSERT INTO restaurant (id, name, freight_rate, cuisine_id, created_at, updated_
 INSERT INTO restaurant (id, name, freight_rate, cuisine_id, created_at, updated_at, active, open) VALUES (5, 'Lanchonete do Tio Sam', 11, 4, utc_timestamp, utc_timestamp, true, true);
 INSERT INTO restaurant (id, name, freight_rate, cuisine_id, created_at, updated_at, active, open) VALUES (6, 'Bar da Maria', 6, 4, utc_timestamp, utc_timestamp, true, true);
 
-INSERT INTO payment_method (id, description) VALUES (1, 'Cartão de crédito');
-INSERT INTO payment_method (id, description) VALUES (2, 'Cartão de débito');
-INSERT INTO payment_method (id, description) VALUES (3, 'Dinheiro');
+INSERT INTO payment_method (id, description, updated_at) VALUES (1, 'Cartão de crédito', utc_timestamp);
+INSERT INTO payment_method (id, description, updated_at) VALUES (2, 'Cartão de débito', utc_timestamp);
+INSERT INTO payment_method (id, description, updated_at) VALUES (3, 'Dinheiro', utc_timestamp);
 
 INSERT INTO restaurant_payment_method (restaurant_id, payment_method_id) VALUES (1, 1), (1, 2), (1, 3), (2, 3), (3, 2), (3, 3), (4, 1), (4, 2), (5, 1), (5, 2), (6, 3);
 

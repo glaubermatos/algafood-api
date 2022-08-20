@@ -1,11 +1,14 @@
 package com.algaworks.glauber.algafood.api.controller;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,13 +51,24 @@ public class RestaurantController {
 
 	@JsonView(RestaurantView.Summary.class)
 	@GetMapping
-	public List<RestaurantModel> index() {
-		return restaurantModelAssembler.toCollectionModel(restaurantRepository.findAll());
+	public ResponseEntity<List<RestaurantModel>> index() {
+		
+		List<RestaurantModel> restaurantesModel = restaurantModelAssembler
+				.toCollectionModel(restaurantRepository.findAll());
+		
+		
+		return ResponseEntity.ok()
+//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+//				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePrivate()) // permite apenas cache local no navegador do cliente
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS).cachePublic()) //permite cache intermediário, um cache compartilhado
+//				.cacheControl(CacheControl.noCache()) // se a resposta for cacheada vai ser necessário sempre uma validação no servidor, passa a ser obrigatória, a representação no cache local fica sempre stale
+//				.cacheControl(CacheControl.noStore()) //esse sim não permite armazenar o cache da resposta
+				.body(restaurantesModel);
 	}
 
 	@JsonView(RestaurantView.JustName.class)
 	@GetMapping(params = "projection=just_name")
-	public List<RestaurantModel> indexJustName() {
+	public ResponseEntity<List<RestaurantModel>> indexJustName() {
 		return index();
 	}
 
@@ -88,11 +102,15 @@ public class RestaurantController {
 //	}
 	
 	@GetMapping("/{restaurantId}")
-	public RestaurantModel show(@PathVariable Long restaurantId) {
+	public ResponseEntity<RestaurantModel> show(@PathVariable Long restaurantId) {
 //		if (true) {
 //			throw new IllegalArgumentException("teste");
 //		}
-		return restaurantModelAssembler.toModel(restaurantRegistrationService.findRestaurantByIdOrElseThrow(restaurantId));
+		RestaurantModel restaurantModel = restaurantModelAssembler.toModel(restaurantRegistrationService.findRestaurantByIdOrElseThrow(restaurantId));
+		
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.body(restaurantModel);
 	}
 	
 	@PostMapping

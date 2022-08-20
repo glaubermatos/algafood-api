@@ -1,11 +1,15 @@
 package com.algaworks.glauber.algafood.api.controller;
 
+import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.context.request.ServletWebRequest;
+import org.springframework.web.filter.ShallowEtagHeaderFilter;
 
 import com.algaworks.glauber.algafood.api.assembler.PaymentMethodInputDisassembler;
 import com.algaworks.glauber.algafood.api.assembler.PaymentMethodModelAssembler;
@@ -41,16 +47,54 @@ public class PaymentMethodController {
 	private PaymentMethodRegistrationService paymentMethodRegistrationService;
 
 	@GetMapping
-	public List<PaymentMethodModel> index() {
-		return paymentMethodModelAssembler
+	public ResponseEntity<List<PaymentMethodModel>> index(ServletWebRequest servletWebRequest) {
+		ShallowEtagHeaderFilter.disableContentCaching(servletWebRequest.getRequest());
+
+		String eTag = "0";
+		
+		OffsetDateTime lastUpdatedAt = paymentMethodRepository.getLastUpdatedAt();
+		
+		if (lastUpdatedAt != null) {
+			eTag = String.valueOf(lastUpdatedAt.toEpochSecond());
+		}
+		
+		if (servletWebRequest.checkNotModified(eTag)) {
+			return null;
+		}
+		
+		List<PaymentMethodModel> paymentsMethodModel =  paymentMethodModelAssembler
 				.toCollectionModel(paymentMethodRepository.findAll());
+		
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.eTag(eTag)
+				.body(paymentsMethodModel);
 	}
 	
 	@GetMapping("/{paymentMethodId}")
-	public PaymentMethodModel show(@PathVariable Long paymentMethodId) {
-		return paymentMethodModelAssembler
+	public ResponseEntity<PaymentMethodModel> show(@PathVariable Long paymentMethodId, ServletWebRequest servletWebRequest) {
+		ShallowEtagHeaderFilter.disableContentCaching(servletWebRequest.getRequest());
+		
+		String eTag = "0";
+		
+		OffsetDateTime lastUpdatedAt = paymentMethodRepository.getLastUpdatedAtById(paymentMethodId);
+		
+		if (lastUpdatedAt != null) {
+			eTag = String.valueOf(lastUpdatedAt.toEpochSecond());
+		}
+		
+		if (servletWebRequest.checkNotModified(eTag)) {
+			return null;
+		}
+		
+		PaymentMethodModel paymentMethodModel =  paymentMethodModelAssembler
 				.toModel(paymentMethodRegistrationService
 						.findPaymentMethodByIdOrElseThrow(paymentMethodId));
+		
+		return ResponseEntity.ok()
+				.cacheControl(CacheControl.maxAge(10, TimeUnit.SECONDS))
+				.eTag(eTag)
+				.body(paymentMethodModel);
 	}
 	
 	@PostMapping
